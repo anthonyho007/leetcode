@@ -1,0 +1,71 @@
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.num = 1
+
+class KthLargest(object):
+
+    def __init__(self, k, nums):
+        """
+        :type k: int
+        :type nums: List[int]
+        """
+        self.head = None
+        self.k = k
+        for n in nums:
+            res = self.add(n)
+
+    def search(self):
+        curr = self.head
+        cnt = self.k
+        if self.head == None or self.head.num < self.k:
+            return None
+        while cnt > 0:
+            i = 1 + (curr.right.num if curr.right != None else 0)
+            if cnt == i:
+                break
+            elif cnt > i:
+                cnt -= i
+                curr = curr.left
+            else:
+                curr = curr.right
+        
+        return curr.val
+        
+    
+    def add(self, val):
+        """
+        :type val: int
+        :rtype: int
+        """
+        new_node = Node(val)
+        if self.head == None:
+            self.head = new_node
+        else:
+            curr = self.head
+            prev = None
+            while curr != None:
+                prev = curr
+                curr.num += 1
+                if val > curr.val:
+                    curr = curr.right
+                else:
+                    curr = curr.left
+            
+            if prev.val < val:
+                prev.right = new_node
+            else:
+                prev.left = new_node
+        return self.search()
+            
+            
+                
+            
+        
+
+
+# Your KthLargest object will be instantiated and called as such:
+# obj = KthLargest(k, nums)
+# param_1 = obj.add(val)
